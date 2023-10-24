@@ -11,5 +11,6 @@ module.exports = {
   ],
   engine: 'ejs',
   publicPath: path.join(sourcePath, 'public'),
-  styles: path.join(sourcePath, 'public', 'styles')
+  styles: path.join(sourcePath, 'public', 'styles'),
+  layouts: path.join(sourcePath, 'views', 'layouts', 'main')
 }
