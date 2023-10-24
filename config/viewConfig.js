@@ -1,7 +1,9 @@
 const path = require('path')
-
 const sourcePath = path.join(__dirname, '..', 'src');
 
+/**
+ * @returns {views: string[], engine: string, publicPath: string, styles: string}
+ */
 module.exports = {
   views: [
     path.join(sourcePath, 'views'),
