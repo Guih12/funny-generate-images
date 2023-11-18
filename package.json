@@ -2,10 +2,11 @@
   "name": "eletiva",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "node main.js",
+    "frontend": "nodemon frontend/main.js",
+    "backend": "/usr/bin/python3 backend/app.py",
+    "dev:all:watch": "concurrently \"pnpm frontend\" \"pnpm backend\"",
     "build": "tsup main.ts"
   },
   "keywords": [],
@@ -17,9 +18,10 @@
     "dotenv": "^16.3.1",
     "ejs": "^3.1.9",
     "express": "^4.18.2",
-    "express-ejs-layouts": "^2.5.1",
-    "tsup": "^7.2.0",
-    "tsx": "^3.14.0",
-    "typescript": "^5.2.2"
+    "express-ejs-layouts": "^2.5.1"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "nodemon": "^3.0.1"
   }
 }

@@ -6,7 +6,10 @@ const app = express();
 
 const viewConfig = require('./config/viewConfig');
 
-const HomeController = require('./src/controllers/HomeController')
+const HomeController = require('./src/controllers/home-controller');
+const AuthController = require('./src/controllers/auth-controller');
+
+const { setTitle } = require('./src/middlewares/set-title');
 
 app.set('views', viewConfig.views)
 app.set('view engine', viewConfig.engine)
@@ -16,16 +19,15 @@ app.use(cookieParser())
 
 app.use(expressLayouts)
 app.set('layout', viewConfig.layouts)
-
+app.use(setTitle)
 
 app.get('/', (req, res) => new HomeController().index(req, res))
 
-app.get('/user', (req, res) => {
-  res.json({user: {name: 'John Doe', age: 25}})
-})
+app.get('/auth/signin', (req, res) => new AuthController().signIn(req, res))
+app.get('/auth/signup', (req, res) => new AuthController().signUp(req, res))
 
 app.use((req, res) => {
-  res.render('404', { message: `A página ${req.url.split("/")[1]} não existe` })
+  res.render('404', { message: `A página ${req.url.split("/")[1]} não existe`})
 })
 
 app.listen(process.env.PORT, () => {
