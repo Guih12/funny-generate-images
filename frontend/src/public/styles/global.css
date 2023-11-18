@@ -1,3 +1,6 @@
+@import url('./auth/sign-in.css');
+@import url('./auth/sign-up.css');
+
 *{
   margin: 0;
   padding: 0;

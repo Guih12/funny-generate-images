@@ -1,1 +1,54 @@
-<span>Login</span>
+<div class="main-forms">
+
+  <h1 class="title">Funny Images</h1>
+
+  <form action="" method="post">
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email" required>
+
+    <label for="password">Senha:</label>
+    <input type="password" id="password" name="password" required>
+
+    <button type="submit">Entrar</button>
+  </form>
+</div>
+
+
+<script>
+  const form = document.querySelector('form');
+  const email = document.querySelector('#email');
+  const password = document.querySelector('#password');
+
+  const handleLogin = async (email, password) => {
+    try {
+      const response = await fetch('/auth/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
+  
+      if (!response.ok) {
+        throw new Error(`Erro na requisição: ${response.status}`);
+      }
+
+      if(response.ok){
+        window.location.href = '/';
+      }
+  
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const email = e.target.email.value;
+    const password = e.target.password.value;
+
+
+    handleLogin(email, password);
+  })
+
+</script>

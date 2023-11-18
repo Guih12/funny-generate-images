@@ -1,6 +1,6 @@
 class HomeController {
   index(req, res){
-    return res.render('home/index', { title: 'Bem vindo' })    
+    res.render('home/index', { title: 'Bem vindo' })    
   }
 }
 
