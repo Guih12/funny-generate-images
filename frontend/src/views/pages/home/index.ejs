@@ -1,1 +1,33 @@
-<h1><%= title %></h1>
+<div class="home-container">
+  <form>
+    <textarea type="text" name="name" placeholder="Descreva a imagem desejada"> </textarea>
+    <button type="submit">Gerar Imagem</button>
+  </form>
+</div>
+
+
+<script>
+  const form = document.querySelector('form');
+  const textarea = document.querySelector('textarea');
+
+  const getToken = async () => {
+    try {
+      const tokenResponse = await fetch('/current_user');
+      const data = await tokenResponse.json();
+      console.log(data)
+      return data;
+    } catch (error) {
+      console.error('Erro ao obter o token:', error);
+    }
+  };
+
+  form.addEventListener('submit', async(e) => {
+    e.preventDefault();
+    
+    const token = await getToken();
+
+    if(token) {
+      window.location.href = '/auth/signin';
+    }
+  });
+</script>

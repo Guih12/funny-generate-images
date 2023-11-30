@@ -6,27 +6,27 @@
   flex-direction: column;
 }
 
-.title{
+.main-forms .title{
   font-size: 3rem;
   font-weight: 600;
   margin-bottom: 1rem;
 }
 
-form {
+.main-forms form {
   background-color: #fff;
   padding: 20px;
   border-radius: 5px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-input {
+.main-forms input {
   width: 100%;
   padding: 10px;
   margin: 8px 0;
   box-sizing: border-box;
 }
 
-button {
+.main-forms button {
   background-color: rgb(127, 76, 175);
   color: white;
   padding: 10px 15px;

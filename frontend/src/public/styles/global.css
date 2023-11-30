@@ -1,5 +1,7 @@
 @import url('./auth/sign-in.css');
 @import url('./auth/sign-up.css');
+@import url('./navbar.css');
+@import url('./home.css');
 
 *{
   margin: 0;

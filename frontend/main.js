@@ -35,6 +35,14 @@ app.get('/auth/signup', (req, res) => authController.signUp(req, res))
 
 app.post('/auth/login', (req, res) => authController.login(req, res))
 
+app.get('/current_user', (req, res) => {
+  const token = req.cookies.token;
+  if (!token) {
+    return res.status(401).json({ error: 'unauthorized', message: 'Usuário não autenticado' });
+  }
+  res.json({ token });
+})
+
 app.use((req, res) => {
   res.render('404', { message: `A página ${req.url.split("/")[1]} não existe`})
 })
