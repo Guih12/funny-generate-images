@@ -2,16 +2,10 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 10px;
+  padding: 20px;
   background-color: #FF99AC;
   background-image: linear-gradient(90deg, #FF9A8B 0%, #FF6A88 55%, #FF99AC 100%);
-}
-
-.navbar a {
-  font-size: 24px;
-  text-decoration: none;
-  color: #f3f3f3;
-  font-weight: bold;
+  gap: 20px;
 }
 
 @keyframes parallax {

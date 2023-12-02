@@ -10,9 +10,13 @@ const viewConfig = require('./config/viewConfig');
 
 const HomeController = require('./src/controllers/home-controller');
 const AuthController = require('./src/controllers/auth-controller');
+const MyImagesController = require('./src/controllers/my-images-controller');
+const GenerateImageController = require('./src/controllers/generate-image-controller');
 
 const homeController = new HomeController()
 const authController = new AuthController()
+const myImagesController = new MyImagesController()
+const generateImageController = new GenerateImageController()
 
 
 const { setTitle } = require('./src/middlewares/set-title');
@@ -43,6 +47,10 @@ app.get('/current_user', (req, res) => {
   }
   res.json({ token });
 })
+
+
+app.get('/my-images', (req, res) => myImagesController.index(req, res))
+app.get('/generate-image', (req, res) => generateImageController.index(req, res))
 
 app.use((req, res) => {
   res.render('404', { message: `A página ${req.url.split("/")[1]} não existe`})
