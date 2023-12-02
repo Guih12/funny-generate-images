@@ -1,33 +1,102 @@
-<div class="home-container">
+<div class="parallax-container">
+  <div class="parallax-content">
+    <div class="parallax-content typewriter">
+      <h1></h1>
+      <button class="start-button" onclick="scrollToNextSection()">
+        Comece Agora <i class="fas fa-arrow-right"></i>
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="next-section">
   <form>
-    <textarea type="text" name="name" placeholder="Descreva a imagem desejada"> </textarea>
-    <button type="submit">Gerar Imagem</button>
+    <h1>Cadastra-se agora mesmo</h1>
+    <label for="name">Nome:</label>
+    <input type="text" id="name" name="name" required>
+
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email" required>
+
+    <label for="password">Senha:</label>
+    <input type="password" id="password" name="password" required>
+
+    <button type="submit">Cadastrar</button>
+
+    <span class="message-success"></span>
+
+    <div class="signin">
+      <p class="message">Já possui cadastro? <a href="/auth/signin">Entre</a></p>
+    </div>
   </form>
 </div>
 
 
 <script>
-  const form = document.querySelector('form');
-  const textarea = document.querySelector('textarea');
+  document.addEventListener('DOMContentLoaded', function () {
+    const titleElement = document.querySelector('.typewriter h1');
+    const startButton = document.querySelector('.start-button');
+    const text = "Bem-vindo ao Funny Images";
+    let index = 0;
 
-  const getToken = async () => {
-    try {
-      const tokenResponse = await fetch('/current_user');
-      const data = await tokenResponse.json();
-      console.log(data)
-      return data;
-    } catch (error) {
-      console.error('Erro ao obter o token:', error);
+    function type() {
+        if (index < text.length) {
+            titleElement.textContent += text.charAt(index);
+            index++;
+            setTimeout(type, 80);
+        }
     }
-  };
+
+    titleElement.addEventListener('animationend', function () {
+        startButton.style.opacity = '1';
+        startButton.style.transform = 'translateY(0)';
+    });
+
+    type();
+});
+
+  function scrollToNextSection() {
+    const nextSection = document.querySelector('.next-section');
+    nextSection.scrollIntoView({ behavior: 'smooth' });
+  }
+
+  const form = document.querySelector('form');
+  const name = document.querySelector('#name');
+  const email = document.querySelector('#email');
+  const password = document.querySelector('#password');
+  const messageSuccess = document.querySelector('.message-success');
 
   form.addEventListener('submit', async(e) => {
     e.preventDefault();
-    
-    const token = await getToken();
 
-    if(token) {
-      window.location.href = '/auth/signin';
+    const data = {
+      name: name.value,
+      email: email.value,
+      password: password.value
+    };
+
+    try {
+      const response = await fetch('auth/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data),
+      });
+
+      const dataResponse = await response.json();
+      if(response.status === 200) {
+        messageSuccess.innerHTML = 'Cadastro realizado com sucesso! Você será redirecionado para a página de login.';
+
+        setTimeout(() => {
+          window.location.href = '/auth/signin';
+        }, 3000);
+      }
+
+    } catch (error) {
+      console.error('Erro ao cadastrar:', error);
     }
   });
+
 </script>
+

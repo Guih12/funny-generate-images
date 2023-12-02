@@ -34,6 +34,7 @@ app.get('/auth/signin', (req, res) => authController.signIn(req, res))
 app.get('/auth/signup', (req, res) => authController.signUp(req, res))
 
 app.post('/auth/login', (req, res) => authController.login(req, res))
+app.post('/auth/register', (req, res) => authController.register(req, res))
 
 app.get('/current_user', (req, res) => {
   const token = req.cookies.token;

@@ -27,12 +27,15 @@
 }
 
 .main-forms button {
-  background-color: rgb(127, 76, 175);
+  background-color: #FF9A8B;
+  background-image: linear-gradient(90deg, #FF9A8B 0%, #FF6A88 55%, #FF99AC 100%);
   color: white;
-  padding: 10px 15px;
+  padding: 20px;
   border: none;
   border-radius: 3px;
   cursor: pointer;
+  font-size: medium;
+  font-weight: bold;
   width: 100%;
 }
 

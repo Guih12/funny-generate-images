@@ -3,7 +3,8 @@
   justify-content: center;
   align-items: center;
   padding: 10px;
-  background: #6504d4;
+  background-color: #FF99AC;
+  background-image: linear-gradient(90deg, #FF9A8B 0%, #FF6A88 55%, #FF99AC 100%);
 }
 
 .navbar a {
@@ -11,4 +12,13 @@
   text-decoration: none;
   color: #f3f3f3;
   font-weight: bold;
+}
+
+@keyframes parallax {
+  from {
+      transform: translateX(-50%);
+  }
+  to {
+      transform: translateX(50%);
+  }
 }

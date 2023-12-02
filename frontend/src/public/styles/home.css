@@ -1,39 +1,163 @@
-.home-container{
-  width: 100%;
+.parallax-container {
+  background-color: #FF9A8B;
+  background-image: linear-gradient(90deg, #FF9A8B 0%, #FF6A88 55%, #FF99AC 100%);
   height: 100vh;
-
   display: flex;
-  flex-direction: column;
-
   justify-content: center;
   align-items: center;
+  overflow: hidden;
+  position: relative;
 }
 
-.home-container form {
-  background-color: #fff;
-  width: 700px;
-  padding: 30px;
-  border-radius: 5px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+.parallax-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+  position: relative;
+  z-index: 1;
 }
 
-.home-container form textarea {
-  width: 100%;
-  height: 150px;
-  padding: 10px;
-  font-size: 16px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  resize: none;
+.parallax-content h1 {
+  font-size: 4rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+.parallax-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 200%;
+  height: 100%;
+  z-index: 0;
+  animation: parallax 10s infinite alternate linear;
+}
+
+@keyframes parallax {
+  from {
+      transform: translateX(-50%);
+  }
+  to {
+      transform: translateX(50%);
+  }
+}
+
+.typewriter h1 {
+overflow: hidden;
+border-right: .15em solid white;
+white-space: nowrap;
+margin: 0;
+letter-spacing: .15em;
+animation: typing 2s steps(30, end), blink-caret .5s step-end infinite;
+}
+
+.start-button {
+opacity: 0;
+transform: translateY(20px);
+animation: fadeInUp 1s forwards;
+background: linear-gradient(90deg, #FF527B 0%, #FF006E 55%, #FF527B 100%);
+color: #fff;
+border: none;
+padding: 15px 30px;
+font-size: 1.2rem;
+cursor: pointer;
+border-radius: 5px;
+display: flex;
+align-items: center;
+}
+
+.start-button i {
+margin-left: 10px;
+}
+
+.start-button:hover {
+background: linear-gradient(90deg, #FF006E 0%, #FF527B 100%);
+}
+
+.next-section {
+height: 100vh;
+background-color: #eee;
+}
+
+@keyframes typing {
+from { width: 0 }
+to { width: 100% }
+}
+
+@keyframes blink-caret {
+from, to { border-color: transparent }
+50% { border-color: white; }
+}
+
+@keyframes fadeInUp {
+from {
+    opacity: 0;
+    transform: translateY(20px);
+}
+to {
+    opacity: 1;
+    transform: translateY(0);
+}
+}
+
+.next-section {
+background-color: #FF9A8B;
+background-image: linear-gradient(90deg, #FF9A8B 0%, #FF6A88 55%, #FF99AC 100%);
+display: flex;
+justify-content: center;
+align-items: center;
+}
+
+.next-section form {
+display: flex;
+flex-direction: column;
+justify-content: center;
+padding: 30px;
+border-radius: 5px;
+width: 100%;
+width: 700px;
+}
+
+.next-section form h1 {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 15px;
+  text-align: center;
+  color: #fff;
+}
+
+.next-section form input {
+padding: 15px;
+border: none;
+border-radius: 5px;
+margin-bottom: 15px;
+}
+
+.next-section form button {
+padding: 10px;
+border: none;
+border-radius: 5px;
+margin-bottom: 10px;
+background: linear-gradient(90deg, #FF527B 0%, #FF006E 55%, #FF527B 100%);
+color: #fff;
+font-size: 1.2rem;
+cursor: pointer;
+}
+
+.next-section form .message-success {
+  color: white;
+  font-size: medium;
+  text-align: center;
   margin-bottom: 10px;
 }
 
-.home-container button {
-  background-color: rgb(127, 76, 175);
-  color: white;
-  padding: 10px 15px;
-  border: none;
-  border-radius: 3px;
-  cursor: pointer;
-  width: 100%;
+.next-section .signin{
+margin-top: 10px;
+display: flex;
+}
+
+.next-section .signin p {
+font-weight: bold;
 }

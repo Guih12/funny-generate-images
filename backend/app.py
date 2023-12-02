@@ -25,6 +25,7 @@ class User(db.Model):
 class Images(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     image_url = db.Column(db.String(500), nullable=False)
+    likes = db.Column(db.Integer, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
 @app.before_request
@@ -55,6 +56,7 @@ def signup():
     name = data.get('name')
     email = data.get('email')
     password = data.get('password')
+    print('aquiiiii', request.get_json())
 
     hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
 
@@ -87,21 +89,35 @@ def login():
     else:
         return jsonify({'message': 'Usuário ou senha inválidos'}), 401
 
-@app.route('/api/images', methods=['GET'])
-def protected_route():
+@app.route('/api/images', methods=['POST'])
+@token_required
+def protected_route(current_user):
+    prompt = request.get_json().get('prompt')
     url = "https://api.openai.com/v1/images/generations"
     headers = {
         "Content-Type": "application/json",
         "Authorization": "Bearer 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"
     }
     data = {
-        "prompt": "Imagem engraçada de alguem caindo",
+        "prompt": prompt,
         "n":1,
         "size":"256x256"
     }
 
     response = requests.post(url, headers=headers, json=data)
     return jsonify(response.json())
+
+
+@app.put('/api/images/<int:image_id>/like')
+@token_required
+def like(current_user, image_id):
+    image = Images.query.get(image_id)
+    if image:
+        image.likes += 1
+        db.session.commit()
+        return jsonify({'message': 'Imagem curtida com sucesso'})
+    else:
+        return jsonify({'message': 'Imagem não encontrada'}), 404
 
 if __name__ == '__main__':
     app.run(debug=True)

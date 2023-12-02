@@ -12,5 +12,42 @@
     <input type="password" id="password" name="password" required>
 
     <button type="submit">Cadastrar</button>
+
+    <p class="message">Já possui cadastro? <a href="/auth/signin">Entre</a></p>
   </form>
 </div>
+
+<script>
+  const form = document.querySelector('form');
+  const name = document.querySelector('#name');
+  const email = document.querySelector('#email');
+  const password = document.querySelector('#password');
+
+  form.addEventListener('submit', async(e) => {
+    e.preventDefault();
+
+    const data = {
+      name: name.value,
+      email: email.value,
+      password: password.value
+    };
+
+    try {
+      const response = await fetch('/auth/signup', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data),
+      });
+
+      const dataResponse = await response.json();
+      if(dataResponse.status === 200) {
+        
+      }
+
+    } catch (error) {
+      console.error('Erro ao cadastrar:', error);
+    }
+  });
+</script>
