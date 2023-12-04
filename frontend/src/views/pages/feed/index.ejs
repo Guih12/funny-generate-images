@@ -1,1 +1,37 @@
-<h1>Feed</h1>
+<div class="container-feed">
+  <% images.map(function(image) { %>
+    <div class="card-feed">
+      <img src="<%= image.image_url %>" alt="<%= image.text %>"/>
+      <button class="like-button" data-image-id="<%= image.id %>">Curtir</button>
+      <div class="like-message">Imagem curtida!</div>
+    </div>
+  <% }); %>
+</div>
+
+<script>
+  const likeButtons = document.querySelectorAll('.like-button');
+
+  likeButtons.forEach(function(button) {
+    button.addEventListener('click', async function() {
+      const imageId = button.dataset.imageId;
+      button.disabled = true;
+
+      const response = await fetch(`http://localhost:3000/like-image/${imageId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+
+      const card = button.closest('.card-feed');
+      const likeMessage = card.querySelector('.like-message');
+
+      if (response.ok) {
+        card.classList.add('liked');
+        likeMessage.style.display = 'block';
+      } else {
+        button.disabled = false;
+      }
+    });
+  });
+</script>

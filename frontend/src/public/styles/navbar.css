@@ -8,6 +8,14 @@
   gap: 20px;
 }
 
+.navbar a{
+  text-decoration: none;
+  color: #fff;
+  font-size: 1rem;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
 @keyframes parallax {
   from {
       transform: translateX(-50%);

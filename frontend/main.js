@@ -57,6 +57,8 @@ app.get('/feed', (req, res) => feedController.index(req, res))
 app.get('/my-images', (req, res) => myImagesController.index(req, res))
 app.get('/generate-image', (req, res) => generateImageController.index(req, res))
 app.post('/generate-image', (req, res) => generateImageController.generate(req, res))
+app.post('/generate-image/save', (req, res) => generateImageController.save(req, res))
+app.put('/like-image/:image_id', (req, res) => generateImageController.like(req, res))
 
 app.use((req, res) => {
   res.render('404', { message: `A página ${req.url.split("/")[1]} não existe`})

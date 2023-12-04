@@ -6,7 +6,8 @@
     <button type="submit" onclick="generateImage()">
       Gerar imagem
     </button>
-    <button style="display: none;">Salvar a imagem</button>
+    <button style="display: none;" class="save-image">Salvar a imagem</button>
+    <span></span>
   </form>
 </div>
 
@@ -15,7 +16,8 @@
     const textInput = document.getElementById('textInput');
     const generatedImage = document.getElementById('generatedImage');
     const generateButton = document.querySelector('button[type="submit"]');
-    const saveButton = document.querySelector('button:not([type="submit"])');
+    const saveButton = document.querySelector('.save-image');
+    const span = document.querySelector('span');
   
     saveButton.style.display = 'none';
   
@@ -41,10 +43,19 @@
       generateButton.innerHTML = 'Gerar imagem';
       generateButton.disabled = false;
     
-      saveButton.style.display = 'block';
-    
       generateButton.style.display = 'none';
 
+      const saveImage = await fetch('http://localhost:3000/generate-image/save', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          url: imageUrl
+        })
+      })
+
+      span.innerHTML = 'Imagem gerada com sucesso!';
     }catch(err){
       console.log(err)
     }

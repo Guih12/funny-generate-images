@@ -1,6 +1,7 @@
 from functools import wraps
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import desc
 from flask_bcrypt import Bcrypt
 import jwt
 import datetime
@@ -101,7 +102,7 @@ def protected_route(current_user):
     data = {
         "prompt": prompt,
         "n":1,
-        "size":"256x256"
+        "size":"1024x1024"
     }
 
     response = requests.post(url, headers=headers, json=data)
@@ -109,7 +110,7 @@ def protected_route(current_user):
 
 @app.route('/api/all_images', methods=['GET'])
 def images():
-    images = Images.query.all()
+    images = Images.query.order_by(desc(Images.likes)).all()
     images_list = []
     for image in images:
         images_list.append({'id': image.id, 'image_url': image.image_url, 'likes': image.likes})
@@ -118,7 +119,7 @@ def images():
 @app.route('/api/my-images', methods=['GET'])
 @token_required
 def my_images(current_user):
-    images = Images.query.filter_by(user_id=current_user.id).all()
+    images = Images.query.filter_by(user_id=current_user.id).order_by().all()
     images_list = []
     for image in images:
         images_list.append({'id': image.id, 'image_url': image.image_url, 'likes': image.likes})
@@ -129,7 +130,7 @@ def my_images(current_user):
 def save(current_user):
     data = request.get_json()
     image_url = data.get('image_url')
-    new_image = Images(image_url=image_url, user_id=current_user.id)
+    new_image = Images(image_url=image_url, likes=0, user_id=current_user.id, deleted=False)
     db.session.add(new_image)
     db.session.commit()
     return jsonify({'message': 'Imagem salva com sucesso'})

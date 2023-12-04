@@ -7,8 +7,8 @@
 }
 
 .main-generate-image form {
-  width: 50%;
-  height: 50%;
+  width: 1024px;
+  height: 1024px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -49,5 +49,14 @@
   border-radius: 5px;
   font-size: 1.5rem;
   cursor: pointer;
+  margin-top: 1rem;
+}
+
+.main-generate-image form span {
+  padding: 10px;
+  border-radius: 5px;
+  background: #f3f3f3;
+  font-size: 1.5rem;
+  color: rgb(0, 255, 0);
   margin-top: 1rem;
 }

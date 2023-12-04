@@ -3,6 +3,7 @@
 @import url('./navbar.css');
 @import url('./home.css');
 @import url('./generate-image.css');
+@import url('./feed.css');
 
 *{
   margin: 0;
