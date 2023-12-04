@@ -1,1 +1,53 @@
-<h1>Generate image</h1>
+<div class="main-generate-image">
+  <form action="" id="generateForm">
+    <p>Você pode apenas gerar uma única imagem, então seja criativo e conquiste as pessoas!</p>
+    <textarea name="" id="textInput" cols="30" rows="10"></textarea>
+    <img id="generatedImage" src="" alt="Imagem Gerada">
+    <button type="submit" onclick="generateImage()">
+      Gerar imagem
+    </button>
+    <button style="display: none;">Salvar a imagem</button>
+  </form>
+</div>
+
+<script>
+  async function generateImage() {
+    const textInput = document.getElementById('textInput');
+    const generatedImage = document.getElementById('generatedImage');
+    const generateButton = document.querySelector('button[type="submit"]');
+    const saveButton = document.querySelector('button:not([type="submit"])');
+  
+    saveButton.style.display = 'none';
+  
+    generateButton.disabled = true;
+    generateButton.innerHTML = 'Gerando...';
+
+    try{
+      const response = await fetch('http://localhost:3000/generate-image', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          text: textInput.value
+        })
+      })
+
+      const data = await response.json()
+      const imageUrl = data.data.data[0].url
+      generatedImage.src = imageUrl;
+      textInput.style.display = 'none';
+      generatedImage.style.display = 'block';
+      generateButton.innerHTML = 'Gerar imagem';
+      generateButton.disabled = false;
+    
+      saveButton.style.display = 'block';
+    
+      generateButton.style.display = 'none';
+
+    }catch(err){
+      console.log(err)
+    }
+  }
+  
+</script>

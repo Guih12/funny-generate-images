@@ -12,14 +12,17 @@ const HomeController = require('./src/controllers/home-controller');
 const AuthController = require('./src/controllers/auth-controller');
 const MyImagesController = require('./src/controllers/my-images-controller');
 const GenerateImageController = require('./src/controllers/generate-image-controller');
+const FeedController = require('./src/controllers/feed-controller');
 
 const homeController = new HomeController()
 const authController = new AuthController()
 const myImagesController = new MyImagesController()
 const generateImageController = new GenerateImageController()
+const feedController = new FeedController()
 
 
 const { setTitle } = require('./src/middlewares/set-title');
+const { authenticate } = require('./src/middlewares/authenticate');
 
 app.set('views', viewConfig.views)
 app.set('view engine', viewConfig.engine)
@@ -31,6 +34,8 @@ app.use(express.json());
 app.use(expressLayouts)
 app.set('layout', viewConfig.layouts)
 app.use(setTitle)
+// app.use('/my-images', authenticate);
+// app.use('/generate-image', authenticate);
 
 app.get('/', (req, res) => homeController.index(req, res))
 
@@ -48,9 +53,10 @@ app.get('/current_user', (req, res) => {
   res.json({ token });
 })
 
-
+app.get('/feed', (req, res) => feedController.index(req, res))
 app.get('/my-images', (req, res) => myImagesController.index(req, res))
 app.get('/generate-image', (req, res) => generateImageController.index(req, res))
+app.post('/generate-image', (req, res) => generateImageController.generate(req, res))
 
 app.use((req, res) => {
   res.render('404', { message: `A página ${req.url.split("/")[1]} não existe`})

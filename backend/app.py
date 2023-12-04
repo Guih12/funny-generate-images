@@ -9,7 +9,7 @@ import requests
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
 app.config['SECRET_KEY'] = 'sua_chave_secreta_aqui'
-app.config['OPENAPI-KEY'] = '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'
+app.config['OPENAPI-KEY'] = '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'
 
 db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
@@ -25,7 +25,7 @@ class User(db.Model):
 class Images(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     image_url = db.Column(db.String(500), nullable=False)
-    likes = db.Column(db.Integer, nullable=False)
+    likes = db.Column(db.Integer, nullable=True, default=0)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
 @app.before_request
@@ -90,13 +90,12 @@ def login():
         return jsonify({'message': 'Usuário ou senha inválidos'}), 401
 
 @app.route('/api/images', methods=['POST'])
-@token_required
-def protected_route(current_user):
+def protected_route():
     prompt = request.get_json().get('prompt')
     url = "https://api.openai.com/v1/images/generations"
     headers = {
         "Content-Type": "application/json",
-        "Authorization": "Bearer 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"
+        "Authorization": "Bearer " + app.config["OPENAPI-KEY"],
     }
     data = {
         "prompt": prompt,
@@ -107,6 +106,16 @@ def protected_route(current_user):
     response = requests.post(url, headers=headers, json=data)
     return jsonify(response.json())
 
+
+@app.route('/api/images/save', methods=['POST'])
+@token_required
+def save(current_user):
+    data = request.get_json()
+    image_url = data.get('image_url')
+    new_image = Images(image_url=image_url, user_id=current_user.id)
+    db.session.add(new_image)
+    db.session.commit()
+    return jsonify({'message': 'Imagem salva com sucesso'})
 
 @app.put('/api/images/<int:image_id>/like')
 @token_required

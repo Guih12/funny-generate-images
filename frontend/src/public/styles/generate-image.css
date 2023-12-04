@@ -1,0 +1,53 @@
+.main-generate-image {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  height: 100vh;
+}
+
+.main-generate-image form {
+  width: 50%;
+  height: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.main-generate-image p {
+  font-size: 1.5rem;
+  text-align: center;
+  margin-bottom: 1rem;
+  width: 50%;
+}
+
+.main-generate-image form textarea {
+  width: 50%;
+  height: 50%;
+  resize: none;
+  font-size: 1.5rem;
+  padding: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.main-generate-image form img {
+  width: 50%;
+  max-height: 50%;
+  border-radius: 5px;
+  margin-top: 1rem;
+  display: none;
+}
+
+.main-generate-image form button {
+  width: 50%;
+  height: 50px;
+  background-color: #000;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  font-size: 1.5rem;
+  cursor: pointer;
+  margin-top: 1rem;
+}

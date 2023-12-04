@@ -2,6 +2,7 @@
 @import url('./auth/sign-up.css');
 @import url('./navbar.css');
 @import url('./home.css');
+@import url('./generate-image.css');
 
 *{
   margin: 0;
