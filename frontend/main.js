@@ -34,8 +34,8 @@ app.use(express.json());
 app.use(expressLayouts)
 app.set('layout', viewConfig.layouts)
 app.use(setTitle)
-// app.use('/my-images', authenticate);
-// app.use('/generate-image', authenticate);
+app.use('/my-images', authenticate);
+app.use('/generate-image', authenticate);
 
 app.get('/', (req, res) => homeController.index(req, res))
 

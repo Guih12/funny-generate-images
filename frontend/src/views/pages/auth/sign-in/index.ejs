@@ -42,7 +42,7 @@
       const data = await response.json();
       
       if (data.status === 200) {
-        window.location.href = '/';
+        window.location.href = '/feed';
       } else {
         showToast(data.message || 'Erro durante o login');
       }

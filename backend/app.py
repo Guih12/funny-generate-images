@@ -27,27 +27,28 @@ class Images(db.Model):
     image_url = db.Column(db.String(500), nullable=False)
     likes = db.Column(db.Integer, nullable=True, default=0)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-
-@app.before_request
-def before_request():
-    db.create_all()
+    deleted = db.Column(db.Boolean, default=False)
     
-
 def token_required(f):
     @wraps(f)
     def decorated(*args, **kwargs):
         token = request.headers.get('Authorization')
+        
         if not token:
             return jsonify({'message': 'Token não encontrado'}), 401
 
         try:
-            data= jwt.decode(token, app.config['SECRET_KEY'], algorithms=["HS256"])
+            token = token.split(" ")[1]
+            data = jwt.decode(token, app.config['SECRET_KEY'], algorithms=["HS256"])
             current_user = User.query.filter_by(id=data['user_id']).first()
-        except:
+        except jwt.ExpiredSignatureError:
+            return jsonify({'message': 'Token expirado'}), 401
+        except jwt.InvalidTokenError:
             return jsonify({'message': 'Token inválido'}), 401    
+        
         return f(current_user, *args, **kwargs)
+    
     return decorated
-
 
 @app.route('/api/auth/signup', methods=['POST'])
 def signup():
@@ -56,8 +57,7 @@ def signup():
     name = data.get('name')
     email = data.get('email')
     password = data.get('password')
-    print('aquiiiii', request.get_json())
-
+    
     hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
 
     new_user = User(name=name, email=email, password=hashed_password)
@@ -90,7 +90,8 @@ def login():
         return jsonify({'message': 'Usuário ou senha inválidos'}), 401
 
 @app.route('/api/images', methods=['POST'])
-def protected_route():
+@token_required
+def protected_route(current_user):
     prompt = request.get_json().get('prompt')
     url = "https://api.openai.com/v1/images/generations"
     headers = {
@@ -106,6 +107,22 @@ def protected_route():
     response = requests.post(url, headers=headers, json=data)
     return jsonify(response.json())
 
+@app.route('/api/all_images', methods=['GET'])
+def images():
+    images = Images.query.all()
+    images_list = []
+    for image in images:
+        images_list.append({'id': image.id, 'image_url': image.image_url, 'likes': image.likes})
+    return jsonify({'images': images_list})
+
+@app.route('/api/my-images', methods=['GET'])
+@token_required
+def my_images(current_user):
+    images = Images.query.filter_by(user_id=current_user.id).all()
+    images_list = []
+    for image in images:
+        images_list.append({'id': image.id, 'image_url': image.image_url, 'likes': image.likes})
+    return jsonify({'images': images_list})
 
 @app.route('/api/images/save', methods=['POST'])
 @token_required
@@ -116,6 +133,7 @@ def save(current_user):
     db.session.add(new_image)
     db.session.commit()
     return jsonify({'message': 'Imagem salva com sucesso'})
+
 
 @app.put('/api/images/<int:image_id>/like')
 @token_required
@@ -128,5 +146,18 @@ def like(current_user, image_id):
     else:
         return jsonify({'message': 'Imagem não encontrada'}), 404
 
+@app.delete('/api/images/<int:image_id>/delete')
+@token_required
+def delete(current_user, image_id):
+    image = Images.query.get(image_id)
+    if image:
+        image.deleted = True
+        db.session.commit()
+        return jsonify({'message': 'Imagem deletada com sucesso'})
+    else:
+        return jsonify({'message': 'Imagem não encontrada'}), 404
+
 if __name__ == '__main__':
+    with app.app_context():
+        db.create_all()
     app.run(debug=True)
