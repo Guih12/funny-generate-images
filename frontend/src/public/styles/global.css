@@ -4,6 +4,7 @@
 @import url('./home.css');
 @import url('./generate-image.css');
 @import url('./feed.css');
+@import url('./my-images.css');
 
 *{
   margin: 0;

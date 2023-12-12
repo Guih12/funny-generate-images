@@ -15,6 +15,7 @@
     button.addEventListener('click', async function() {
       const imageId = button.dataset.imageId;
       button.disabled = true;
+      console.log(button)
 
       const response = await fetch(`http://localhost:3000/like-image/${imageId}`, {
         method: 'PUT',

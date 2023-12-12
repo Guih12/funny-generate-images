@@ -1,1 +1,32 @@
-<h1>My images</h1>
+<div class="container-my-image">
+  <% images.map(function(image) { %>
+    <div class="card-feed">
+      <img src="<%= image.image_url %>" alt="<%= image.text %>"/>
+      <button class="delete-button" data-image-id="<%= image.id %>">Excluir</button>
+    </div>
+  <% }); %>
+</div>
+
+<script>
+  const likeButtons = document.querySelectorAll('.delete-button');
+
+  likeButtons.forEach(function(button) {
+    button.addEventListener('click', async function() {
+      try {
+        const imageId = button.dataset.imageId;
+        const response = await fetch(`http://localhost:3000/my-images/${imageId}/delete`, {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+        if (response.ok) {
+          alert('deletado com sucesso')
+          window.location.reload()
+        }
+      }catch(err){
+        console.log(err)
+      }
+    });
+  });
+</script>

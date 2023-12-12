@@ -1,0 +1,60 @@
+.container-my-image {
+  max-width: 1024px;
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 40px;
+  justify-content: space-between;
+  opacity: 0;
+  animation: fadeIn 1s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}
+
+.container-my-image .card-feed {
+  width: calc(33.33% - 10px);
+  margin-bottom: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
+  position: relative;
+}
+
+.container-my-image .card-feed.liked {
+  border: 2px solid #FF99AC;
+}
+
+.container-my-image .card-feed img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.container-my-image .card-feed .delete-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: #e6002a;
+  color: #fff;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.container-my-image .card-feed .like-message {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 18px;
+  color: green;
+  display: none;
+}

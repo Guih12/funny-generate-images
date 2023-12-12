@@ -3,14 +3,25 @@ from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import desc
 from flask_bcrypt import Bcrypt
+from dotenv import load_dotenv
 import jwt
 import datetime
 import requests
+import os
+import threading
+import json
+
+load_dotenv()
+
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
 app.config['SECRET_KEY'] = 'sua_chave_secreta_aqui'
 app.config['OPENAPI-KEY'] = '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'
+
 
 db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
@@ -97,9 +108,10 @@ def protected_route(current_user):
     url = "https://api.openai.com/v1/images/generations"
     headers = {
         "Content-Type": "application/json",
-        "Authorization": "Bearer " + app.config["OPENAPI-KEY"],
+        "Authorization": "Bearer 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",
     }
     data = {
+        "model": "dall-e-3",
         "prompt": prompt,
         "n":1,
         "size":"1024x1024"
@@ -119,22 +131,47 @@ def images():
 @app.route('/api/my-images', methods=['GET'])
 @token_required
 def my_images(current_user):
-    images = Images.query.filter_by(user_id=current_user.id).order_by().all()
+    images = Images.query.filter_by(user_id=current_user.id).filter_by(deleted=False).order_by().all()
     images_list = []
     for image in images:
         images_list.append({'id': image.id, 'image_url': image.image_url, 'likes': image.likes})
     return jsonify({'images': images_list})
 
+
+def save_image_local(image_url, path_destination) -> str:
+    try:
+        config = cloudinary.config(secure=True)
+        response = requests.get(image_url)
+        response.raise_for_status()
+        
+        with open(path_destination, 'wb') as f:
+            f.write(response.content)
+        
+        result_upload = cloudinary.uploader.upload(path_destination, use_filename=True, unique_filename=False)
+        
+        return result_upload['secure_url']
+    
+    except Exception as e:
+        print(e)
+
 @app.route('/api/images/save', methods=['POST'])
 @token_required
 def save(current_user):
-    data = request.get_json()
-    image_url = data.get('image_url')
-    new_image = Images(image_url=image_url, likes=0, user_id=current_user.id, deleted=False)
-    db.session.add(new_image)
-    db.session.commit()
-    return jsonify({'message': 'Imagem salva com sucesso'})
-
+    try:
+        data = request.get_json()
+        image_url = data.get('image_url')
+    
+        _, extension = os.path.splitext(image_url)
+        path_destination = os.path.join('/home/george', f'unique_name{extension}')
+    
+        cloudinary_url = save_image_local(image_url, path_destination)
+              
+        new_image = Images(image_url=cloudinary_url, likes=0, user_id=current_user.id, deleted=False)
+        db.session.add(new_image)
+        db.session.commit()
+        return jsonify({'message': 'Imagem salva com sucesso'})
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 @app.put('/api/images/<int:image_id>/like')
 @token_required

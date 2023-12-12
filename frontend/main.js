@@ -34,9 +34,6 @@ app.use(express.json());
 app.use(expressLayouts)
 app.set('layout', viewConfig.layouts)
 app.use(setTitle)
-app.use('/my-images', authenticate);
-app.use('/generate-image', authenticate);
-
 app.get('/', (req, res) => homeController.index(req, res))
 
 app.get('/auth/signin', (req, res) => authController.signIn(req, res))
@@ -44,6 +41,10 @@ app.get('/auth/signup', (req, res) => authController.signUp(req, res))
 
 app.post('/auth/login', (req, res) => authController.login(req, res))
 app.post('/auth/register', (req, res) => authController.register(req, res))
+
+
+app.use('/my-images', authenticate);
+app.use('/generate-image', authenticate);
 
 app.get('/current_user', (req, res) => {
   const token = req.cookies.token;
@@ -53,12 +54,13 @@ app.get('/current_user', (req, res) => {
   res.json({ token });
 })
 
-app.get('/feed', (req, res) => feedController.index(req, res))
-app.get('/my-images', (req, res) => myImagesController.index(req, res))
-app.get('/generate-image', (req, res) => generateImageController.index(req, res))
-app.post('/generate-image', (req, res) => generateImageController.generate(req, res))
-app.post('/generate-image/save', (req, res) => generateImageController.save(req, res))
-app.put('/like-image/:image_id', (req, res) => generateImageController.like(req, res))
+app.get('/feed',                          authenticate, (req, res) => feedController.index(req, res))
+app.get('/my-images',                     authenticate, (req, res) => myImagesController.index(req, res))
+app.get('/generate-image',                authenticate, (req, res) => generateImageController.index(req, res))
+app.post('/generate-image',               authenticate, (req, res) => generateImageController.generate(req, res))
+app.post('/generate-image/save',          authenticate, (req, res) => generateImageController.save(req, res))
+app.put('/like-image/:image_id',          authenticate, (req, res) => generateImageController.like(req, res))
+app.delete('/my-images/:image_id/delete', authenticate, (req, res) => myImagesController.deleteImage(req, res))
 
 app.use((req, res) => {
   res.render('404', { message: `A página ${req.url.split("/")[1]} não existe`})
