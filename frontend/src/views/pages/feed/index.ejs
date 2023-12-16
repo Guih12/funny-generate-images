@@ -2,7 +2,7 @@
   <% images.map(function(image) { %>
     <div class="card-feed">
       <img src="<%= image.image_url %>" alt="<%= image.text %>"/>
-      <button class="like-button" data-image-id="<%= image.id %>">Curtir</button>
+      <button class="like-button" data-image-id="<%= image.id %>">Curtir <span class="count-like" data-count-like="<%=image.likes%>" ><%= image.likes %></span></button>
       <div class="like-message">Imagem curtida!</div>
     </div>
   <% }); %>
@@ -15,7 +15,6 @@
     button.addEventListener('click', async function() {
       const imageId = button.dataset.imageId;
       button.disabled = true;
-      console.log(button)
 
       const response = await fetch(`http://localhost:3000/like-image/${imageId}`, {
         method: 'PUT',
